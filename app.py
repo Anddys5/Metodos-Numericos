@@ -8,7 +8,7 @@ st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layou
 # -------------------------
 # ESTILOS Y ENCABEZADO ACADÉMICO
 # -------------------------
-st.title("🔬 Desafío Métodos Numéricos: Optimización de Recursos en Datacenters")
+st.title("🔬 Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
 **Materia:** Métodos Numéricos (Mención Ingeniería de Sistemas)  
 **Institución:** Universidad Mayor de San Andrés (UMSA)  
@@ -21,7 +21,7 @@ st.markdown("""
 with st.sidebar:
     st.header("⚙️ Configuración del Sistema")
     caso = st.selectbox("Seleccione el Escenario de Análisis:", 
-                        ["Ideal", "Estrés (Alta Demanda)", "Mal Condicionado", "Personalizado"])
+                        ["Ideal", "Estrés (Demanda Energética Extrema)", "Mal Condicionado", "Personalizado"])
     w = st.slider("Parámetro de Relajación ω (SOR)", 0.5, 2.0, 1.1)
     tol = 1e-6
     st.info("💡 Consejo: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
@@ -29,26 +29,27 @@ with st.sidebar:
 # -------------------------
 # PESTAÑAS PRINCIPALES (ORGANIZACIÓN DE INVESTIGACIÓN)
 # -------------------------
-tab1, tab2, tab3 = st.tabs(["📋 Marco Teórico y Contexto", "💻 Simulador y Solución", "📊 Análisis Estadístico y Conclusiones"])
+tab1, tab2, tab3 = st.tabs(["📋 Marco Teórico y Contexto Biológo", "💻 Simulador y Solución", "📊 Análisis Estadístico y Conclusiones"])
 
 with tab1:
     st.header("1. Contextualización del Caso de Estudio")
     st.markdown("""
-    La simulación modela la distribución dinámica de cargas de trabajo en un clúster de servidores de infraestructura crítica. En un Datacenter, el rendimiento óptimo depende del balance algebraico de tres recursos vectoriales interdependientes:
+    Debido a la alta tasa metabólica de las aves neotropicales, el organismo debe equilibrar de forma estricta la ingesta y absorción de macronutrientes esenciales para mantener la homeostasis en diferentes estados ambientales y fisiológicos.
     
-    * **$x_1$:** Carga de trabajo asignada a **Servidores de Procesamiento (CPU)**.
-    * **$x_2$:** Carga de trabajo asignada a **Servidores de Memoria (RAM)**.
-    * **$x_3$:** Carga de trabajo asignada a **Servidores de Almacenamiento (SSD)**.
+    Variables del Modelo Alimentario:
+    * **$x_1$:** Ingesta requerida de **Proteínas** (g) 
+    * **$x_2$:** Ingesta requerida de **Lípidos** (g) 
+    * **$x_3$:** Ingesta requerida de **Carbohidratos** (g) 
     
     ### Modelado Matemático
-    El comportamiento dinámico se describe mediante un sistema de ecuaciones lineales simultáneas de la forma:
+    El balance de nutrientes en el organismo se describe mediante un sistema de ecuaciones lineales simultáneas de la forma:
     $$A x = b$$
-    Donde la matriz de coeficientes $A \in \mathbb{R}^{3 \\times 3}$ representa las tasas de transferencia de procesos internos y el vector de acoplamiento $b \in \mathbb{R}^3$ denota la demanda agregada externa de peticiones concurrentes en el nodo.
+    Donde la matriz de coeficientes $A \in \mathbb{R}^{3 \\times 3}$ representa la eficiencia de absorción metabólica de cada tipo de alimento disponible, y el vector de acoplamiento $b \in \mathbb{R}^3$ denota la demanda energética neta requerida por el ave[cite: 15].
     
-    ### Requerimiento Académico del Análisis de Escenarios:
-    1.  **Caso Ideal:** Estructura matricial estrictamente diagonal dominante. La diagonalización asegura un radio espectral $\\rho(B) < 1$, garantizando convergencia asintótica veloz.
-    2.  **Bajo Estrés:** Matriz simétrica definida positiva con valores en escala extendida. Simula picos concurrentes masivos (ej. tráfico de sistemas de inscripciones universitarias).
-    3.  **Mal Condicionado:** Sistema con hiperplanos casi paralelos. Presenta una alta sensibilidad estructural frente a perturbaciones numéricas y truncamientos algorítmicos.
+    ### Análisis de Escenarios según la Guía:
+    1.  **Caso Ideal:** El sistema es consistente, bien condicionado y las fuentes de alimento son balanceadas. Cumple con la dominancia diagonal[cite: 10].
+    2.  **Caso Bajo Estrés:** Refleja una demanda energética extrema (ej. el proceso de migración estacional), donde los coeficientes aumentan su magnitud significativamente para sostener el catabolismo basal[cite: 11].
+    3.  **Caso Mal Condicionado:** Se presenta cuando dos fuentes de alimento disponibles en el ecosistema son nutricionalmente casi idénticas, lo que genera hiperplanos casi paralelos y dificulta críticamente la convergencia[cite: 12].
     """)
 
 # -------------------------
@@ -58,7 +59,7 @@ def cargar_sistema(caso):
     if caso == "Ideal":
         A = np.array([[4, 1, 1], [1, 5, 2], [1, 2, 3]], float) 
         b = np.array([6, 15, 14], float)
-    elif caso == "Estrés (Alta Demanda)":
+    elif caso == "Estrés (Demanda Energética Extrema)":
         A = np.array([[400, 150, 120], [150, 500, 180], [120, 180, 600]], float)
         b = np.array([1200, 2500, 3000], float)
     elif caso == "Mal Condicionado":
@@ -125,7 +126,7 @@ def gradiente_conjugado_prec(A, b, x0, tol):
     z = M_inv @ r
     p = z.copy()
     errores = []
-    for k in range(len(b) * 10): # Ampliado para dar rango en mal condicionado
+    for k in range(len(b) * 10): 
         Ap = A @ p
         alpha = (r @ z) / (p @ Ap)
         x = x + alpha * p
@@ -147,18 +148,17 @@ with tab2:
     
     col_mat1, col_mat2, col_mat3 = st.columns([2, 1, 1])
     with col_mat1:
-        st.write("**Matriz de Coeficientes Estructurales (A):**")
+        st.write("**Matriz de Eficiencia Nutricional (A):**")
         st.write(A)
     with col_mat2:
-        st.write("**Vector de Demanda (b):**")
+        st.write("**Vector de Demandas Metabólicas (b):**")
         st.write(b)
     with col_mat3:
         st.metric("Número de Condición $\kappa(A)$", f"{cond_a:.2e}", 
-                  help="Un $\kappa(A) \sim 1$ indica estabilidad perfecta. Un valor elevado denota sensibilidad crítica.")
+                  help="Un $\kappa(A) \sim 1$ indica estabilidad biológica. Un valor elevado denota sensibilidad crítica.")
 
     st.markdown("---")
     
-    # Resolver de forma automática para poblar la investigación instantáneamente
     x0 = np.zeros(len(b))
     sol_exacta = np.linalg.solve(A, b)
     s_j, i_j, e_j = jacobi(A, b, x0, tol)
@@ -166,19 +166,20 @@ with tab2:
     s_sor, i_sor, e_sor = sor(A, b, x0, w, tol)
     s_gc, i_gc, e_gc = gradiente_conjugado_prec(A, b, x0, tol)
 
-    st.subheader("💡 Solución Directa de Referencia (Método Exacto LU)")
-    st.success(f"Vector de soluciones exactas halladas: $x_1$ (CPU) = **{sol_exacta[0]:.4f}**, $x_2$ (RAM) = **{sol_exacta[1]:.4f}**, $x_3$ (SSD) = **{sol_exacta[2]:.4f}**")
+    st.subheader("💡 Solución Directa de Referencia (Método Exacto Factorización LU)")
+    st.success(f"Gramos óptimos requeridos: $x_1$ (Proteínas) = **{sol_exacta[0]:.4f}g**, $x_2$ (Lípidos) = **{sol_exacta[1]:.4f}g**, $x_3$ (Carbohidratos) = **{sol_exacta[2]:.4f}g** [cite: 7, 19]")
 
-    # Tabla Comparativa requerida por la Licenciada
+    # Tabla Comparativa requerida por la Licenciada (Cuadro 1)
     resumen = pd.DataFrame({
-        "Algoritmo / Enfoque": ["Solución Directa (LU)", "Método Jacobi", "Método Gauss-Seidel", f"Método SOR (ω={w})", "Gradiente Conjugado Prec."],
-        "Iteraciones de Convergencia": [1, i_j, i_gs, i_sor, i_gc],
-        "Error Residual Final": [0.0, e_j[-1], e_gs[-1], e_sor[-1], e_gc[-1]],
-        "Estado del Método": ["Estable (Exacto)", "Convergió" if i_j < 100 else "Divergió / Inestable", "Convergió" if i_gs < 100 else "Inestable", "Convergió" if i_sor < 100 else "Inestable", "Estable Asintótico"]
-    })
+        "Algoritmo / Enfoque": ["Solución Directa (Factorización LU)", "Método Jacobi", "Método Gauss-Seidel", f"Método SOR (ω={w})", "Gradiente Conjugado Prec."],
+        "Iteraciones (Ideal)": [1, i_j if caso=="Ideal" else "-", i_gs if caso=="Ideal" else "-", i_sor if caso=="Ideal" else "-", i_gc if caso=="Ideal" else "-"],
+        "Iteraciones (Stress)": [1, i_j if "Estrés" in caso else "-", i_gs if "Estrés" in caso else "-", i_sor if "Estrés" in caso else "-", i_gc if "Estrés" in caso else "-"],
+        "Iteraciones (Mal C.)": [1, i_j if "Mal" in caso else "-", i_gs if "Mal" in caso else "-", i_sor if "Mal" in caso else "-", i_gc if "Mal" in caso else "-"],
+        "Converge": ["Sí (Exacto)", "Sí" if i_j < 100 else "No", "Sí" if i_gs < 100 else "No", "Sí" if i_sor < 100 else "No", "Sí"]
+    }) [cite: 26]
     
-    st.subheader("📊 Tabla Comparativa de Desempeño Numérico")
-    st.dataframe(resumen.style.highlight_min(axis=0, subset=["Iteraciones de Convergencia"], color="#1e3d59"))
+    st.subheader("📊 Tabla Comparativa de Eficiencia (Tolerancia $10^{-6}$)")
+    st.dataframe(resumen) [cite: 32]
 
     # Gráficos en columnas divididas
     col_g1, col_g2 = st.columns(2)
@@ -202,7 +203,7 @@ with tab2:
         fig_3d = plt.figure(figsize=(10, 7))
         ax_3d = fig_3d.add_subplot(111, projection='3d')
         
-        limit = 10 if caso != "Estrés (Alta Demanda)" else 100
+        limit = 10 if "Estrés" not in caso else 100
         X, Y = np.meshgrid(np.linspace(-limit, limit, 10), np.linspace(-limit, limit, 10))
 
         for i in range(3):
@@ -210,51 +211,47 @@ with tab2:
                 Z = (b[i] - A[i][0]*X - A[i][1]*Y) / A[i][2]
                 ax_3d.plot_surface(X, Y, Z, alpha=0.2)
         
-        ax_3d.scatter(sol_exacta[0], sol_exacta[1], sol_exacta[2], color='red', s=150, label='Solución Vectorial Exacta', depthshade=False)
-        ax_3d.set_xlabel('Eje X1 (CPU)')
-        ax_3d.set_ylabel('Eje X2 (RAM)')
-        ax_3d.set_zlabel('Eje X3 (SSD)')
+        ax_3d.scatter(sol_exacta[0], sol_exacta[1], sol_exacta[2], color='red', s=150, label='Punto de Homeostasis Exacto', depthshade=False)
+        ax_3d.set_xlabel('Proteínas (x1)')
+        ax_3d.set_ylabel('Lípidos (x2)')
+        ax_3d.set_zlabel('Carbohidratos (x3)')
         ax_3d.legend()
-        st.pyplot(fig_3d)
+        st.pyplot(fig_3d) [cite: 22]
 
 # -------------------------
-# CONTENIDO DE LA PESTAÑA 3: ANÁLISIS E INVESTIGACIÓN (¡ESTO ES LO QUE FALTA!)
+# CONTENIDO DE LA PESTAÑA 3: ANÁLISIS BIOLÓGICO
 # -------------------------
 with tab3:
-    st.header("3. Informe Estadístico y Evaluación Numérica")
+    st.header("3. Informe de Interpretación Biológica y Evaluación Numérica")
     
     if caso == "Ideal":
         st.markdown(f"""
-        ### 🟢 Análisis Estadístico del Escenario Ideal
-        * **Evaluación de la Estructura:** El sistema cuenta con un Número de Condición extremadamente bajo ($\kappa(A) = {cond_a:.2f}$). Esto denota que la matriz está matemáticamente perfectamente bien condicionada.
-        * **Comportamiento de los Algoritmos:** Dado que la matriz cumple rigurosamente con la propiedad de **Dominancia Diagonal Estricta** ($|a_{{ii}}| > \sum_{{j \\neq i}} |a_{{ij}}|$), los métodos matriciales iterativos de **Jacobi** y **Gauss-Seidel** convergen rápidamente sin oscilaciones salvajes.
-        * **Contraste con la Solución Directa:** El error residual final con respecto a la Factorización LU converge de forma asintótica hacia la tolerancia solicitada ($10^{{-6}}$) en menos de 20 iteraciones.
+        ### 🟢 Análisis del Escenario Ideal
+        * **Interpretación Ecológica:** El ecosistema provee fuentes de alimento balanceadas y diferenciadas. El ave metaboliza los nutrientes sin solapamiento de absorción, garantizando estabilidad homeostática[cite: 10].
+        * **Evaluación de la Estructura:** El sistema cuenta con un Número de Condición bajo ($\kappa(A) = {cond_a:.2f}$). Al cumplirse la **Dominancia Diagonal Estricta**, los métodos matriciales iterativos clásicos (**Jacobi** y **Gauss-Seidel**) convergen con extrema rapidez[cite: 20].
         """)
         
-    elif caso == "Estrés (Alta Demanda)":
+    elif "Estrés" in caso:
         st.markdown(f"""
-        ### 🟡 Análisis Estadístico del Escenario Bajo Estrés
-        * **Evaluación de la Estructura:** Al expandir los coeficientes físicos representativos de las transferencias masivas de datos en el clúster, el Número de Condición se mantiene estable ($\kappa(A) = {cond_a:.2f}$), demostrando que la escala lineal preserva la naturaleza definida positiva del sistema.
-        * **Impacto de la Optimización SOR:** Aquí se aprecia la utilidad académica del método de **Sobrerrelajación (SOR)**. Modificando convenientemente el parámetro de aceleración $\omega$ en la barra lateral, es posible observar experimentalmente cómo la curva reduce sustancialmente el número de iteraciones respecto a Gauss-Seidel elemental.
-        * **Gradiente Conjugado Precondicionado:** Este algoritmo avanzado (fundamentado en el análisis de investigación docente de la **UMSA**) demuestra su óptimo rendimiento al linealizar problemas de alta escala con mínima dispersión del error residual.
+        ### 🟡 Análisis del Escenario Bajo Estrés (Fase de Migración)
+        * **Interpretación Ecológica:** Durante el vuelo migratorio masivo, la demanda metabólica y el gasto energético se disparan de forma exponencial[cite: 11]. El ave requiere asimilar macromutrientes a tasas críticas.
+        * **Impacto Numérico:** Aunque la escala de la matriz se amplía, conserva propiedades definidas. Aquí se destaca el método **SOR**, donde al optimizar manualmente el parámetro $\omega$ en la barra lateral se reduce drásticamente el coste computacional frente al algoritmo estacionario tradicional[cite: 21].
         """)
         
-    elif caso == "Mal Condicionado":
+    elif "Mal" in caso:
         st.markdown(f"""
-        ### 🔴 Análisis Estadístico del Escenario Crítico (Mal Condicionado)
-        * **Fenómeno de Inestabilidad Estructural:** El Número de Condición calculado es críticamente alto ($\kappa(A) = {cond_a:.2e}$). Matemáticamente, esto significa que las filas de la matriz $A$ describen vectores linealmente casi dependientes.
-        * **Interpretación Geométrica:** Observando el gráfico 3D contiguo de la pestaña 2, los tres hiperplanos espaciales se visualizan prácticamente paralelos entre sí. No existe una intersección limpia y angulada, por lo que determinar el punto exacto de cruce es numéricamente inestable.
-        * **Fracaso de Métodos Clásicos vs. Gradiente:** Como expone la bibliografía de la carrera de Informática (Suñagua, 2020), ante matrices mal condicionadas, las aproximaciones por **Jacobi** o **Gauss-Seidel** tienden al infinito o divergen debido a la acumulación exponencial de errores de redondeo en la mantisa de punto flotante de la CPU. Solo los enfoques basados en subespacios de Krylov precondicionados logran acotar el vector de residuos.
+        ### 🔴 Análisis del Escenario Crítico (Mal Condicionado)
+        * **Interpretación Ecológica:** Dos o más de las fuentes vegetales de alimento disponibles en el entorno son nutricionalmente casi idénticas (mismas proporciones de proteínas y lípidos)[cite: 12]. Esto causa una redundancia sistémica en el tracto digestivo.
+        * **Geometría y Fracaso Algorítmico:** Visualmente en el gráfico 3D, los hiperplanos interactúan de manera casi paralela, haciendo que la intersección sea difusa e inestable[cite: 12, 22]. Como cita la bibliografía especializada de la carrera (Suñagua, 2020), la acumulación de errores por redondeo provoca el colapso y la divergencia en aproximaciones de **Jacobi** o **Gauss-Seidel**, requiriendo estrictamente técnicas de subespacios de Krylov como el **Gradiente Conjugado Precondicionado**[cite: 21].
         """)
     else:
         st.markdown("""
-        ### ⚙️ Evaluación del Escenario Personalizado por el Usuario
-        * Por favor, utiliza los datos numéricos inyectados dinámicamente en el panel de cómputo para evaluar de forma personalizada la tasa de convergencia y la validez analítica de la matriz configurada en base al Número de Condición obtenido.
+        ### ⚙️ Evaluación del Escenario Personalizado
         """)
 
     st.markdown("""
     ---
     ### 📌 Bibliografía de Respaldo Académico
-    * Suñagua, P. (2020). *Métodos Numéricos y Resolución de Sistemas Lineales por Subespacios**. Revista del Instituto de Investigación en Informática - UMSA.
+    * Suñagua, P. (2020). *Métodos Numéricos y Resolución de Sistemas Lineales por Subespacios*. Revista del Instituto de Investigación en Informática - UMSA.
     * Burden, R. L., & Faires, J. D. (2011). *Análisis Numérico*. Cengage Learning.
     """)
