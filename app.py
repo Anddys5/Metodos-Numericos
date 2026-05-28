@@ -8,10 +8,10 @@ st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layou
 # -------------------------
 # ENCABEZADO ACADÉMICO
 # -------------------------
-st.title("🔬 Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
+st.title("Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
-**Materia:** Métodos Numéricos (Mención Ingeniería de Sistemas)  
-**Institución:** Universidad Mayor de San Andrés (UMSA)  
+**Materia:** Métodos Numéricos - Mención Ingeniería de Sistemas
+** ** Universidad Mayor de San Andrés (UMSA)  
 ---
 """)
 
