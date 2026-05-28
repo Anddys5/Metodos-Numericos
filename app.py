@@ -8,7 +8,7 @@ st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layou
 # -------------------------
 # ENCABEZADO ACADÉMICO
 # -------------------------
-st.title("🔬 Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
+st.title("Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
 **Materia:** Métodos Numéricos (Mención Ingeniería de Sistemas)  
 **Institución:** Universidad Mayor de San Andrés (UMSA)  
@@ -25,7 +25,7 @@ with st.sidebar:
                         ["Ideal", "Estrés (Demanda Energética Extrema)", "Mal Condicionado", "Personalizado"])
     w = st.slider("Parámetro de Relajación ω (SOR)", 0.5, 2.0, 1.1)
     tol = 1e-6
-    st.info("💡 Consejo del Auxiliar: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
+    st.info("💡 Consejo: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
 
 # -------------------------
 # PESTAÑAS PRINCIPALES
