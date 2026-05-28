@@ -10,8 +10,11 @@ st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layou
 # -------------------------
 st.title("Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
+
 **Materia:** Métodos Numéricos - Mención Ingeniería de Sistemas - UMSA
+
 **Estudiante:** Carla Andrea Enriquez Bravo   
+
 ---
 """)
 
