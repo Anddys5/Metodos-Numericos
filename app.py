@@ -254,31 +254,35 @@ with tab2:
         st.pyplot(fig_3d)
 
 # -------------------------
-# PESTAÑA 3: INFORME Y CONCLUSIONES AMPLIADAS (REQUERIMIENTO AUXILIAR)
+# PESTAÑA 3: INFORME Y CONCLUSIONES AMPLIADAS 
 # -------------------------
 with tab3:
     st.header("3. Informe de Interpretación Biológica y Evaluación Numérica Avanzada")
     
     # EXPLICACIÓN COMPLETA DE LOS CASOS DE ESTUDIO CRÍTICOS
     st.markdown(f"""
-    ### 🔬 Análisis Dinámico de la Estructura de los Escenarios\n
-    1.  **Caso Ideal (Ecosistema Balanceado):** La matriz posee un número de condición bajo ($\kappa(A) = {cond_a:.2f}$). Fisiológicamente significa que los alimentos disponibles tienen perfiles nutricionales marcadamente independientes, permitiendo al ave regular su ingesta sin ambigüedades metabólicas. Al existir dominancia diagonal estricta ($|a_{ii}| > \sum_{j \neq i} |a_{ij}|$), la convergencia estacionaria clásica está garantizada matemáticamente.\n
-    2.  **Caso Bajo Estrés (Migración Estacional):** En este escenario, las demandas fisiológicas se multiplican por un factor de escala masivo ($10^2$). Aunque la estabilidad geométrica se mantiene idéntica al caso ideal debido a que los hiperplanos resguardan sus ángulos de inclinación relativas, el crecimiento numérico de los componentes del vector $b$ incrementa los residuos iniciales, exigiendo algoritmos con un radio espectral de matriz de iteración óptimo para evitar retrasos computacionales.\n
-    3.  **Caso Mal Condicionado (Crisis en el Nicho Ecológico):** Representa el escenario más crítico. Al ser dos fuentes alimenticias nutricionalmente casi indistinguibles, las filas 1 y 2 de la matriz se vuelven linealmente casi dependientes. Esto dispara el número de condición hacia el orden de $\kappa(A) \approx 10^4$. Geométricamente, los hiperplanos se vuelven prácticamente paralelos, ensanchando la zona de intersección. Cualquier mínimo error por redondeo en punto flotante (IEEE 754) desvía la solución de manera exponencial, invalidando los métodos estacionarios iterativos.
+    ### 🔬 Análisis Dinámico de la Estructura de los Escenarios
+    
+    1. **Caso Ideal (Ecosistema Balanceado):** La matriz posee un número de condición bajo ($\kappa(A) = {cond_a:.2f}$). Fisiológicamente significa que los alimentos disponibles tienen perfiles nutricionales marcadamente independientes, permitiendo al ave regular su ingesta sin ambigüedades metabólicas. Al existir dominancia diagonal estricta ($|a_{ii}| > \sum_{j \neq i} |a_{ij}|$), la convergencia estacionaria clásica está garantizada matemáticamente.
+    
+    2. **Caso Bajo Estrés (Migración Estacional):** En este escenario, las demandas fisiológicas se multiplican por un factor de escala masivo ($10^2$). Aunque la estabilidad geométrica se mantiene idéntica al caso ideal debido a que los hiperplanos resguardan sus ángulos de inclinación relativas, el crecimiento numérico de los componentes del vector $b$ incrementa los residuos iniciales, exigiendo algoritmos con un radio espectral de matriz de iteración óptimo para evitar retrasos computacionales.
+    
+    3. **Caso Crisis en el Nicho Ecológico (Mal Condicionado):** Representa el escenario más crítico. Al ser dos fuentes alimenticias nutricionalmente casi indistinguibles, las filas 1 y 2 de la matriz se vuelven linealmente casi dependientes. Esto dispara el número de condición hacia el orden de $\kappa(A) \approx 10^4$. Geométricamente, los hiperplanos se vuelven prácticamente paralelos, ensanchando la zona de intersección. Cualquier mínimo error por redondeo en punto flotante (IEEE 754) desvía la solución de manera exponencial, invalidando los métodos estacionarios iterativos.
     """)
     
     st.markdown("---")
     st.subheader("📊 Evaluación Comparativa y Selección del Método Óptimo")
     
     st.markdown("""
-    Basado en los experimentos numéricos ejecutados en la plataforma en tiempo real, se extraen las siguientes conclusiones del desempeño algorítmico:\n
+    Basado en los experimentos numéricos ejecutados en la plataforma en tiempo real, se extraen las siguientes conclusiones del desempeño algorítmico:
     
     * **¿Cuál es el mejor método en términos generales?**
-        El **Gradiente Conjugado Precondicionado (GCP)** se consolida como el algoritmo más robusto y eficiente para la resolución integral del modelo. A diferencia de los métodos de punto fijo lineal, no depende de la dominancia diagonal de la matriz ni es sensible al sobrecalentamiento numérico de los residuos.\n
+      El **Gradiente Conjugado Precondicionado (GCP)** se consolida como el algoritmo más robusto y eficiente para la resolución integral del modelo. A diferencia de los métodos de punto fijo lineal, no depende de la dominancia diagonal de la matriz ni es sensible al sobrecalentamiento numérico de los residuos.
+      
     * **Evaluación Específica por Escenario:**
-        * **En el Escenario Ideal:** El método **Gauss-Seidel** es altamente eficiente, requiriendo un número mínimo de iteraciones debido a la actualización inmediata de las variables en memoria compartida, superando el retraso por pasos intermedios de Jacobi.
-        * **En el Escenario de Estrés:** El método **SOR** (Sobrerelajación Sucesiva) programado resulta ser la mejor elección operativa. Al tunear el slider dinámico a un parámetro de aceleración óptimo (ej. $\omega \approx 1.1 - 1.2$), barre con el residuo lineal y reduce el número de bucles computacionales de manera notable frente a Gauss-Seidel común.
-        * **En el Escenario Mal Condicionado:** Los métodos iterativos clásicos (**Jacobi y Gauss-Seidel**) sufren un colapso algorítmico total, superando las 100 iteraciones sin aproximarse a la tolerancia exigida debido a que el radio espectral de su matriz de iteración supera la unidad ($\rho(T) \geq 1$). En este caso límite, solo la **Factorización Directa LU** y el **Gradiente Conjugado Precondicionado** resuelven el sistema de homeostasis biológica con un error residual inferior a $10^{-6}$.
+      * **En el Escenario Ideal:** El método **Gauss-Seidel** es altamente eficiente, requiriendo un número mínimo de iteraciones debido a la actualización inmediata de las variables en memoria compartida, superando el retraso por pasos intermedios de Jacobi.
+      * **En el Escenario de Estrés:** El método **SOR** (Sobrerelajación Sucesiva) programado resulta ser la mejor elección operativa. Al tunear el slider dinámico a un parámetro de aceleración óptimo (ej. $\omega \approx 1.1 - 1.2$), barre con el residuo lineal y reduce el número de bucles computacionales de manera notable frente a Gauss-Seidel común.
+      * **En el Escenario Mal Condicionado:** Los métodos iterativos clásicos (**Jacobi y Gauss-Seidel**) sufren un colapso algorítmico total, superando las 100 iteraciones sin aproximarse a la tolerancia exigida debido a que el radio espectral de su matriz de iteración supera la unidad ($\rho(T) \geq 1$). En este caso límite, solo la **Factorización Directa LU** y el **Gradiente Conjugado Precondicionado** resuelven el sistema de homeostasis biológica con un error residual inferior a $10^{-6}$.
     """)
 
     st.markdown("""
