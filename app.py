@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layout="wide")
 
 # -------------------------
-# ESTILOS Y ENCABEZADO ACADÉMICO
+# ENCABEZADO ACADÉMICO
 # -------------------------
 st.title("🔬 Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
@@ -27,29 +27,29 @@ with st.sidebar:
     st.info("💡 Consejo: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
 
 # -------------------------
-# PESTAÑAS PRINCIPALES (ORGANIZACIÓN DE INVESTIGACIÓN)
+# PESTAÑAS PRINCIPALES
 # -------------------------
 tab1, tab2, tab3 = st.tabs(["📋 Marco Teórico y Contexto Biológo", "💻 Simulador y Solución", "📊 Análisis Estadístico y Conclusiones"])
 
 with tab1:
     st.header("1. Contextualización del Caso de Estudio")
     st.markdown("""
-    Debido a la alta tasa metabólica de las aves neotropicales, el organismo debe equilibrar de forma estricta la ingesta y absorción de macronutrientes esenciales para mantener la homeostasis en diferentes estados ambientales y fisiológicos.
+    Due to the high metabolic rate of neotropical birds, the organism must strictly balance the intake and absorption of essential macronutrients to maintain homeostasis in different environmental and physiological states. [cite: 7]
     
     Variables del Modelo Alimentario:
-    * **$x_1$:** Ingesta requerida de **Proteínas** (g) 
-    * **$x_2$:** Ingesta requerida de **Lípidos** (g) 
-    * **$x_3$:** Ingesta requerida de **Carbohidratos** (g) 
+    * **$x_1$:** Ingesta requerida de **Proteínas** (g) [cite: 7]
+    * **$x_2$:** Ingesta requerida de **Lípidos** (g) [cite: 7]
+    * **$x_3$:** Ingesta requerida de **Carbohidratos** (g) [cite: 7]
     
     ### Modelado Matemático
-    El balance de nutrientes en el organismo se describe mediante un sistema de ecuaciones lineales simultáneas de la forma:
+    El balance de nutrientes en el organismo se describe mediante un sistema de ecuaciones lineales simultáneas de la forma: [cite: 9]
     $$A x = b$$
-    Donde la matriz de coeficientes $A \in \mathbb{R}^{3 \\times 3}$ representa la eficiencia de absorción metabólica de cada tipo de alimento disponible, y el vector de acoplamiento $b \in \mathbb{R}^3$ denota la demanda energética neta requerida por el ave[cite: 15].
+    Donde la matriz de coeficientes $A \\in \\mathbb{R}^{3 \\times 3}$ representa la eficiencia de absorción metabólica de cada tipo de alimento disponible, y el vector de acoplamiento $b \\in \\mathbb{R}^3$ denota la demanda energética neta requerida por el ave. [cite: 15]
     
     ### Análisis de Escenarios según la Guía:
-    1.  **Caso Ideal:** El sistema es consistente, bien condicionado y las fuentes de alimento son balanceadas. Cumple con la dominancia diagonal[cite: 10].
-    2.  **Caso Bajo Estrés:** Refleja una demanda energética extrema (ej. el proceso de migración estacional), donde los coeficientes aumentan su magnitud significativamente para sostener el catabolismo basal[cite: 11].
-    3.  **Caso Mal Condicionado:** Se presenta cuando dos fuentes de alimento disponibles en el ecosistema son nutricionalmente casi idénticas, lo que genera hiperplanos casi paralelos y dificulta críticamente la convergencia[cite: 12].
+    1.  **Caso Ideal:** El sistema es consistente, bien condicionado y las fuentes de alimento son balanceadas. Cumple con la dominancia diagonal. [cite: 10]
+    2.  **Caso Bajo Estrés:** Refleja una demanda energética extrema (ej. el proceso de migración estacional), donde los coeficientes aumentan su magnitud significativamente para sostener el catabolismo basal. [cite: 11]
+    3.  **Caso Mal Condicionado:** Se presenta cuando dos fuentes de alimento disponibles en el ecosistema son nutricionalmente casi idénticas, lo que genera hiperplanos casi paralelos y dificulta críticamente la convergencia. [cite: 12]
     """)
 
 # -------------------------
@@ -80,7 +80,7 @@ A, b = cargar_sistema(caso)
 cond_a = np.linalg.cond(A)
 
 # -------------------------
-# ALGORITMOS ITERATIVOS (TUS FUNCIONES)
+# ALGORITMOS ITERATIVOS
 # -------------------------
 def jacobi(A, b, x0, tol, max_iter=100):
     x = x0.copy()
@@ -141,7 +141,7 @@ def gradiente_conjugado_prec(A, b, x0, tol):
     return x, len(b)*10, errores
 
 # -------------------------
-# CONTENIDO DE LA PESTAÑA 2: SIMULADOR Y TRABAJO
+# PESTAÑA 2: SIMULADOR
 # -------------------------
 with tab2:
     st.header(f"2. Análisis en Tiempo Real del Escenario: {caso}")
@@ -167,21 +167,20 @@ with tab2:
     s_gc, i_gc, e_gc = gradiente_conjugado_prec(A, b, x0, tol)
 
     st.subheader("💡 Solución Directa de Referencia (Método Exacto Factorización LU)")
-    st.success(f"Gramos óptimos requeridos: $x_1$ (Proteínas) = **{sol_exacta[0]:.4f}g**, $x_2$ (Lípidos) = **{sol_exacta[1]:.4f}g**, $x_3$ (Carbohidratos) = **{sol_exacta[2]:.4f}g** [cite: 7, 19]")
+    st.success(f"Gramos óptimos requeridos: $x_1$ (Proteínas) = **{sol_exacta[0]:.4f}g**, $x_2$ (Lípidos) = **{sol_exacta[1]:.4f}g**, $x_3$ (Carbohidratos) = **{sol_exacta[2]:.4f}g**")
 
-    # Tabla Comparativa requerida por la Licenciada (Cuadro 1)
+    # Tabla Comparativa requerida por la Licenciada
     resumen = pd.DataFrame({
         "Algoritmo / Enfoque": ["Solución Directa (Factorización LU)", "Método Jacobi", "Método Gauss-Seidel", f"Método SOR (ω={w})", "Gradiente Conjugado Prec."],
         "Iteraciones (Ideal)": [1, i_j if caso=="Ideal" else "-", i_gs if caso=="Ideal" else "-", i_sor if caso=="Ideal" else "-", i_gc if caso=="Ideal" else "-"],
         "Iteraciones (Stress)": [1, i_j if "Estrés" in caso else "-", i_gs if "Estrés" in caso else "-", i_sor if "Estrés" in caso else "-", i_gc if "Estrés" in caso else "-"],
         "Iteraciones (Mal C.)": [1, i_j if "Mal" in caso else "-", i_gs if "Mal" in caso else "-", i_sor if "Mal" in caso else "-", i_gc if "Mal" in caso else "-"],
         "Converge": ["Sí (Exacto)", "Sí" if i_j < 100 else "No", "Sí" if i_gs < 100 else "No", "Sí" if i_sor < 100 else "No", "Sí"]
-    }) [cite: 26]
+    })
     
     st.subheader("📊 Tabla Comparativa de Eficiencia (Tolerancia $10^{-6}$)")
-    st.dataframe(resumen) [cite: 32]
+    st.dataframe(resumen)
 
-    # Gráficos en columnas divididas
     col_g1, col_g2 = st.columns(2)
     
     with col_g1:
@@ -203,8 +202,15 @@ with tab2:
         fig_3d = plt.figure(figsize=(10, 7))
         ax_3d = fig_3d.add_subplot(111, projection='3d')
         
-        limit = 10 if "Estrés" not in caso else 100
-        X, Y = np.meshgrid(np.linspace(-limit, limit, 10), np.linspace(-limit, limit, 10))
+        # Corrección definitiva de la malla para evitar errores de dimensiones numéricas
+        if "Estrés" in caso:
+            lim_x = np.linspace(-10, 10, 10)
+            lim_y = np.linspace(-10, 10, 10)
+        else:
+            lim_x = np.linspace(-10, 10, 10)
+            lim_y = np.linspace(-10, 10, 10)
+            
+        X, Y = np.meshgrid(lim_x, lim_y)
 
         for i in range(3):
             if A[i][2] != 0:
@@ -216,10 +222,10 @@ with tab2:
         ax_3d.set_ylabel('Lípidos (x2)')
         ax_3d.set_zlabel('Carbohidratos (x3)')
         ax_3d.legend()
-        st.pyplot(fig_3d) [cite: 22]
+        st.pyplot(fig_3d)
 
 # -------------------------
-# CONTENIDO DE LA PESTAÑA 3: ANÁLISIS BIOLÓGICO
+# PESTAÑA 3: ANÁLISIS BIOLÓGICO
 # -------------------------
 with tab3:
     st.header("3. Informe de Interpretación Biológica y Evaluación Numérica")
@@ -227,27 +233,25 @@ with tab3:
     if caso == "Ideal":
         st.markdown(f"""
         ### 🟢 Análisis del Escenario Ideal
-        * **Interpretación Ecológica:** El ecosistema provee fuentes de alimento balanceadas y diferenciadas. El ave metaboliza los nutrientes sin solapamiento de absorción, garantizando estabilidad homeostática[cite: 10].
-        * **Evaluación de la Estructura:** El sistema cuenta con un Número de Condición bajo ($\kappa(A) = {cond_a:.2f}$). Al cumplirse la **Dominancia Diagonal Estricta**, los métodos matriciales iterativos clásicos (**Jacobi** y **Gauss-Seidel**) convergen con extrema rapidez[cite: 20].
+        * **Interpretación Ecológica:** El ecosistema provee fuentes de alimento balanceadas y diferenciadas. El ave metaboliza los nutrientes sin solapamiento de absorción, garantizando estabilidad homeostática. [cite: 10]
+        * **Evaluación de la Estructura:** El sistema cuenta con un Número de Condición bajo ($\kappa(A) = {cond_a:.2f}$). Al cumplirse la **Dominancia Diagonal Estricta**, los métodos matriciales iterativos clásicos (**Jacobi** y **Gauss-Seidel**) convergen con extrema rapidez. [cite: 10]
         """)
         
     elif "Estrés" in caso:
         st.markdown(f"""
         ### 🟡 Análisis del Escenario Bajo Estrés (Fase de Migración)
-        * **Interpretación Ecológica:** Durante el vuelo migratorio masivo, la demanda metabólica y el gasto energético se disparan de forma exponencial[cite: 11]. El ave requiere asimilar macromutrientes a tasas críticas.
-        * **Impacto Numérico:** Aunque la escala de la matriz se amplía, conserva propiedades definidas. Aquí se destaca el método **SOR**, donde al optimizar manualmente el parámetro $\omega$ en la barra lateral se reduce drásticamente el coste computacional frente al algoritmo estacionario tradicional[cite: 21].
+        * **Interpretación Ecológica:** Durante el vuelo migratorio masivo, la demanda metabólica y el gasto energético se disparan de forma exponencial. El ave requiere asimilar macromutrientes a tasas críticas. [cite: 11]
+        * **Impacto Numérico:** Aunque la escala de la matriz se amplía, conserva propiedades definidas. Aquí se destaca el método **SOR**, donde al optimizar manualmente el parámetro $\omega$ en la barra lateral se reduce drásticamente el coste computacional frente al algoritmo tradicional. [cite: 21]
         """)
         
     elif "Mal" in caso:
         st.markdown(f"""
         ### 🔴 Análisis del Escenario Crítico (Mal Condicionado)
-        * **Interpretación Ecológica:** Dos o más de las fuentes vegetales de alimento disponibles en el entorno son nutricionalmente casi idénticas (mismas proporciones de proteínas y lípidos)[cite: 12]. Esto causa una redundancia sistémica en el tracto digestivo.
-        * **Geometría y Fracaso Algorítmico:** Visualmente en el gráfico 3D, los hiperplanos interactúan de manera casi paralela, haciendo que la intersección sea difusa e inestable[cite: 12, 22]. Como cita la bibliografía especializada de la carrera (Suñagua, 2020), la acumulación de errores por redondeo provoca el colapso y la divergencia en aproximaciones de **Jacobi** o **Gauss-Seidel**, requiriendo estrictamente técnicas de subespacios de Krylov como el **Gradiente Conjugado Precondicionado**[cite: 21].
+        * **Interpretación Ecológica:** Dos o más de las fuentes vegetales de alimento disponibles en el entorno son nutricionalmente casi idénticas. Esto causa una redundancia sistémica en el tracto digestivo. [cite: 12]
+        * **Geometría y Fracaso Algorítmico:** Visualmente en el gráfico 3D, los hiperplanos interactúan de manera casi paralela, haciendo que la intersección sea difusa e inestable. [cite: 12] La acumulación de errores por redondeo provoca el colapso y la divergencia en aproximaciones de **Jacobi** o **Gauss-Seidel**, requiriendo estrictamente técnicas de subespacios de Krylov como el **Gradiente Conjugado Precondicionado**. [cite: 21]
         """)
     else:
-        st.markdown("""
-        ### ⚙️ Evaluación del Escenario Personalizado
-        """)
+        st.markdown("### ⚙️ Evaluación del Escenario Personalizado")
 
     st.markdown("""
     ---
