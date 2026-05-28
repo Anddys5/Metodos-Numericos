@@ -8,13 +8,11 @@ st.set_page_config(page_title="Sistemas Lineales PRO - Informática UMSA", layou
 # -------------------------
 # ENCABEZADO ACADÉMICO
 # -------------------------
-st.title("Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
+st.title("🔬 Desafío Métodos Numéricos: Optimización de la Dieta y Metabolismo en Aves Neotropicales")
 st.markdown("""
-
-**Materia:** Métodos Numéricos - Mención Ingeniería de Sistemas - UMSA
-
-**Estudiante:** Carla Andrea Enriquez Bravo   
-
+**Materia:** Métodos Numéricos (Mención Ingeniería de Sistemas)  
+**Institución:** Universidad Mayor de San Andrés (UMSA)  
+**Estudiante:** Carla Andrea Enriquez Bravo  
 ---
 """)
 
@@ -27,33 +25,67 @@ with st.sidebar:
                         ["Ideal", "Estrés (Demanda Energética Extrema)", "Mal Condicionado", "Personalizado"])
     w = st.slider("Parámetro de Relajación ω (SOR)", 0.5, 2.0, 1.1)
     tol = 1e-6
-    st.info("💡 Consejo: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
+    st.info("💡 Consejo del Auxiliar: Evalúa el impacto de ω en el escenario de Estrés para observar la aceleración de convergencia.")
 
 # -------------------------
 # PESTAÑAS PRINCIPALES
 # -------------------------
-tab1, tab2, tab3 = st.tabs(["📋 Marco Teórico y Contexto Biológo", "💻 Simulador y Solución", "📊 Análisis Estadístico y Conclusiones"])
+tab1, tab2, tab3 = st.tabs(["📋 1. Marco Teórico y Algoritmos", "💻 2. Simulador y Solución", "📊 3. Informe Técnico y Conclusiones"])
 
 with tab1:
     st.header("1. Contextualización del Caso de Estudio")
     st.markdown("""
-    Due to the high metabolic rate of neotropical birds, the organism must strictly balance the intake and absorption of essential macronutrients to maintain homeostasis in different environmental and physiological states. [cite: 7]
+    Debido a la alta tasa metabólica de las aves neotropicales, el organismo debe equilibrar de forma estricta la ingesta y absorción de macronutrientes esenciales para mantener la homeostasis en diferentes estados ambientales y fisiológicos.\n
     
-    Variables del Modelo Alimentario:
-    * **$x_1$:** Ingesta requerida de **Proteínas** (g) [cite: 7]
-    * **$x_2$:** Ingesta requerida de **Lípidos** (g) [cite: 7]
-    * **$x_3$:** Ingesta requerida de **Carbohidratos** (g) [cite: 7]
+    **Variables del Modelo Alimentario:**\n
+    * **$x_1$:** Ingesta requerida de **Proteínas** (g)
+    * **$x_2$:** Ingesta requerida de **Lípidos** (g)
+    * **$x_3$:** Ingesta requerida de **Carbohidratos** (g)\n
     
     ### Modelado Matemático
-    El balance de nutrientes en el organismo se describe mediante un sistema de ecuaciones lineales simultáneas de la forma: [cite: 9]
-    $$A x = b$$
-    Donde la matriz de coeficientes $A \\in \\mathbb{R}^{3 \\times 3}$ representa la eficiencia de absorción metabólica de cada tipo de alimento disponible, y el vector de acoplamiento $b \\in \\mathbb{R}^3$ denota la demanda energética neta requerida por el ave. [cite: 15]
-    
-    ### Análisis de Escenarios según la Guía:
-    1.  **Caso Ideal:** El sistema es consistente, bien condicionado y las fuentes de alimento son balanceadas. Cumple con la dominancia diagonal. [cite: 10]
-    2.  **Caso Bajo Estrés:** Refleja una demanda energética extrema (ej. el proceso de migración estacional), donde los coeficientes aumentan su magnitud significativamente para sostener el catabolismo basal. [cite: 11]
-    3.  **Caso Mal Condicionado:** Se presenta cuando dos fuentes de alimento disponibles en el ecosistema son nutricionalmente casi idénticas, lo que genera hiperplanos casi paralelos y dificulta críticamente la convergencia. [cite: 12]
+    El balance de nutrientes en el organismo se describe mediante un sistema de ecuaciones lineales simultáneas de la forma:\n
+    $$A x = b$$\n
+    Donde la matriz de coeficientes $A \\in \\mathbb{R}^{3 \\times 3}$ representa la eficiencia de absorción metabólica de cada tipo de alimento disponible, y el vector de acoplamiento $b \\in \\mathbb{R}^3$ denota la demanda energética neta requerida por el ave.
     """)
+    
+    st.markdown("---")
+    st.subheader("📚 Desarrollo y Paso a Paso de los Algoritmos Avanzados")
+    
+    with st.expander("🔍 Ver Desarrollo Matemático Paso a Paso del Método SOR (Aceleración)"):
+        st.markdown("""
+        El método de **Sobrerelajación Sucesiva (SOR)** es una modificación del método de Gauss-Seidel que utiliza un parámetro de ponderación $\\omega$ para acelerar de forma lineal la convergencia hacia la solución exacta.\n
+        
+        **Fórmula General de Recurrencia:**
+        $$x_i^{(k+1)} = (1 - \\omega)x_i^{(k)} + \\frac{\\omega}{a_{ii}} \\left( b_i - \\sum_{j=1}^{i-1} a_{ij}x_j^{(k+1)} - \\sum_{j=i+1}^{n} a_{ij}x_j^{(k)} \\right)$$
+        
+        **Simulación de la Primera Iteración Manual (Caso Ideal, $x^{(0)} = [0,0,0]^T, \\omega = 1.1$):**\n
+        Dado el sistema balanceado de la UMSA:\n
+        $$4x_1 + 1x_2 + 1x_3 = 6$$\n
+        $$1x_1 + 5x_2 + 2x_3 = 15$$\n
+        $$1x_1 + 2x_2 + 3x_3 = 14$$\n
+        
+        * **Paso 1: Calcular $x_1^{(1)}$**
+            $$x_1^{(1)} = (1 - 1.1)(0) + \\frac{1.1}{4} \\left( 6 - 0 - 0 \\right) = \\frac{6.6}{4} = 1.6500$$
+        * **Paso 2: Calcular $x_2^{(1)}$ usando el nuevo valor $x_1^{(1)}$**
+            $$x_2^{(1)} = (1 - 1.1)(0) + \\frac{1.1}{5} \\left( 15 - (1)(1.6500) - 0 \\right) = \\frac{1.1}{5}(13.35) = 2.9370$$
+        * **Paso 3: Calcular $x_3^{(1)}$ usando los dos valores previos actualizados**
+            $$x_3^{(1)} = (1 - 1.1)(0) + \\frac{1.1}{3} \\left( 14 - (1)(1.6500) - (2)(2.9370) \\right) = 2.3746$$
+        \nEl vector en la primera iteración resulta $x^{(1)} = [1.6500, 2.9370, 2.3746]^T$. Este proceso cíclico continúa hasta que la norma del error $\\|x^{(k+1)} - x^{(k)}\\| < 10^{-6}$.
+        """)
+
+    with st.expander("🔍 Ver Mecanismo del Gradiente Conjugado Precondicionado (Krylov)"):
+        st.markdown("""
+        Para sistemas de gran escala o mal condicionados, las iteraciones de punto fijo fallan. El algoritmo del **Gradiente Conjugado Precondicionado (GCP)** minimiza la función cuadrática de energía $f(x) = \\frac{1}{2}x^T A x - b^T x$ en el espacio tridimensional utilizando direcciones ortogonales respecto a la matriz $A$.\n
+        
+        **Estructura Operativa del Cómputo (Algoritmo de Suñagua):**
+        1.  Calcular residuo inicial: $r_0 = b - Ax_0$
+        2.  Resolver el sistema de precondicionamiento: $M z_0 = r_0$ (donde $M = \\text{diag}(A)$)
+        3.  Establecer la dirección de búsqueda inicial: $p_0 = z_0$
+        4.  Iterar calculando el tamaño de paso óptimo: $\\alpha_k = \\frac{r_k^T z_k}{p_k^T A p_k}$
+        5.  Actualizar aproximación y residuo: $x_{k+1} = x_k + \\alpha_k p_k$, y $r_{k+1} = r_k - \\alpha_k A p_k$
+        6.  Calcular el factor de corrección de dirección: $\\beta_k = \\frac{r_{k+1}^T z_{k+1}}{r_k^T z_k}$
+        7.  Refinar la nueva dirección conjugada: $p_{k+1} = z_{k+1} + \\beta_k p_k$
+        """)
 
 # -------------------------
 # CARGA DE SISTEMAS MATRICIALES
@@ -157,8 +189,8 @@ with tab2:
         st.write("**Vector de Demandas Metabólicas (b):**")
         st.write(b)
     with col_mat3:
-        st.metric("Número de Condición $\kappa(A)$", f"{cond_a:.2e}", 
-                  help="Un $\kappa(A) \sim 1$ indica estabilidad biológica. Un valor elevado denota sensibilidad crítica.")
+        st.metric("Número de Condición $\\kappa(A)$", f"{cond_a:.2e}", 
+                  help="Un número cercano a 1 indica estabilidad biológica ideal. Un valor elevado denota sensibilidad crítica a perturbaciones.")
 
     st.markdown("---")
     
@@ -172,7 +204,7 @@ with tab2:
     st.subheader("💡 Solución Directa de Referencia (Método Exacto Factorización LU)")
     st.success(f"Gramos óptimos requeridos: $x_1$ (Proteínas) = **{sol_exacta[0]:.4f}g**, $x_2$ (Lípidos) = **{sol_exacta[1]:.4f}g**, $x_3$ (Carbohidratos) = **{sol_exacta[2]:.4f}g**")
 
-    # Tabla Comparativa requerida por la Licenciada
+    # Tabla Comparativa requerida por el Cuadro 1 de la Guía
     resumen = pd.DataFrame({
         "Algoritmo / Enfoque": ["Solución Directa (Factorización LU)", "Método Jacobi", "Método Gauss-Seidel", f"Método SOR (ω={w})", "Gradiente Conjugado Prec."],
         "Iteraciones (Ideal)": [1, i_j if caso=="Ideal" else "-", i_gs if caso=="Ideal" else "-", i_sor if caso=="Ideal" else "-", i_gc if caso=="Ideal" else "-"],
@@ -205,14 +237,8 @@ with tab2:
         fig_3d = plt.figure(figsize=(10, 7))
         ax_3d = fig_3d.add_subplot(111, projection='3d')
         
-        # Corrección definitiva de la malla para evitar errores de dimensiones numéricas
-        if "Estrés" in caso:
-            lim_x = np.linspace(-10, 10, 10)
-            lim_y = np.linspace(-10, 10, 10)
-        else:
-            lim_x = np.linspace(-10, 10, 10)
-            lim_y = np.linspace(-10, 10, 10)
-            
+        lim_x = np.linspace(-10, 10, 10)
+        lim_y = np.linspace(-10, 10, 10)
         X, Y = np.meshgrid(lim_x, lim_y)
 
         for i in range(3):
@@ -228,33 +254,32 @@ with tab2:
         st.pyplot(fig_3d)
 
 # -------------------------
-# PESTAÑA 3: ANÁLISIS BIOLÓGICO
+# PESTAÑA 3: INFORME Y CONCLUSIONES AMPLIADAS (REQUERIMIENTO AUXILIAR)
 # -------------------------
 with tab3:
-    st.header("3. Informe de Interpretación Biológica y Evaluación Numérica")
+    st.header("3. Informe de Interpretación Biológica y Evaluación Numérica Avanzada")
     
-    if caso == "Ideal":
-        st.markdown(f"""
-        ### 🟢 Análisis del Escenario Ideal
-        * **Interpretación Ecológica:** El ecosistema provee fuentes de alimento balanceadas y diferenciadas. El ave metaboliza los nutrientes sin solapamiento de absorción, garantizando estabilidad homeostática. [cite: 10]
-        * **Evaluación de la Estructura:** El sistema cuenta con un Número de Condición bajo ($\kappa(A) = {cond_a:.2f}$). Al cumplirse la **Dominancia Diagonal Estricta**, los métodos matriciales iterativos clásicos (**Jacobi** y **Gauss-Seidel**) convergen con extrema rapidez. [cite: 10]
-        """)
-        
-    elif "Estrés" in caso:
-        st.markdown(f"""
-        ### 🟡 Análisis del Escenario Bajo Estrés (Fase de Migración)
-        * **Interpretación Ecológica:** Durante el vuelo migratorio masivo, la demanda metabólica y el gasto energético se disparan de forma exponencial. El ave requiere asimilar macromutrientes a tasas críticas. [cite: 11]
-        * **Impacto Numérico:** Aunque la escala de la matriz se amplía, conserva propiedades definidas. Aquí se destaca el método **SOR**, donde al optimizar manualmente el parámetro $\omega$ en la barra lateral se reduce drásticamente el coste computacional frente al algoritmo tradicional. [cite: 21]
-        """)
-        
-    elif "Mal" in caso:
-        st.markdown(f"""
-        ### 🔴 Análisis del Escenario Crítico (Mal Condicionado)
-        * **Interpretación Ecológica:** Dos o más de las fuentes vegetales de alimento disponibles en el entorno son nutricionalmente casi idénticas. Esto causa una redundancia sistémica en el tracto digestivo. [cite: 12]
-        * **Geometría y Fracaso Algorítmico:** Visualmente en el gráfico 3D, los hiperplanos interactúan de manera casi paralela, haciendo que la intersección sea difusa e inestable. [cite: 12] La acumulación de errores por redondeo provoca el colapso y la divergencia en aproximaciones de **Jacobi** o **Gauss-Seidel**, requiriendo estrictamente técnicas de subespacios de Krylov como el **Gradiente Conjugado Precondicionado**. [cite: 21]
-        """)
-    else:
-        st.markdown("### ⚙️ Evaluación del Escenario Personalizado")
+    # EXPLICACIÓN COMPLETA DE LOS CASOS DE ESTUDIO CRÍTICOS
+    st.markdown(f"""
+    ### 🔬 Análisis Dinámico de la Estructura de los Escenarios\n
+    1.  **Caso Ideal (Ecosistema Balanceado):** La matriz posee un número de condición bajo ($\kappa(A) = {cond_a:.2f}$). Fisiológicamente significa que los alimentos disponibles tienen perfiles nutricionales marcadamente independientes, permitiendo al ave regular su ingesta sin ambigüedades metabólicas. Al existir dominancia diagonal estricta ($|a_{ii}| > \sum_{j \neq i} |a_{ij}|$), la convergencia estacionaria clásica está garantizada matemáticamente.\n
+    2.  **Caso Bajo Estrés (Migración Estacional):** En este escenario, las demandas fisiológicas se multiplican por un factor de escala masivo ($10^2$). Aunque la estabilidad geométrica se mantiene idéntica al caso ideal debido a que los hiperplanos resguardan sus ángulos de inclinación relativas, el crecimiento numérico de los componentes del vector $b$ incrementa los residuos iniciales, exigiendo algoritmos con un radio espectral de matriz de iteración óptimo para evitar retrasos computacionales.\n
+    3.  **Caso Mal Condicionado (Crisis en el Nicho Ecológico):** Representa el escenario más crítico. Al ser dos fuentes alimenticias nutricionalmente casi indistinguibles, las filas 1 y 2 de la matriz se vuelven linealmente casi dependientes. Esto dispara el número de condición hacia el orden de $\kappa(A) \approx 10^4$. Geométricamente, los hiperplanos se vuelven prácticamente paralelos, ensanchando la zona de intersección. Cualquier mínimo error por redondeo en punto flotante (IEEE 754) desvía la solución de manera exponencial, invalidando los métodos estacionarios iterativos.
+    """)
+    
+    st.markdown("---")
+    st.subheader("📊 Evaluación Comparativa y Selección del Método Óptimo")
+    
+    st.markdown("""
+    Basado en los experimentos numéricos ejecutados en la plataforma en tiempo real, se extraen las siguientes conclusiones del desempeño algorítmico:\n
+    
+    * **¿Cuál es el mejor método en términos generales?**
+        El **Gradiente Conjugado Precondicionado (GCP)** se consolida como el algoritmo más robusto y eficiente para la resolución integral del modelo. A diferencia de los métodos de punto fijo lineal, no depende de la dominancia diagonal de la matriz ni es sensible al sobrecalentamiento numérico de los residuos.\n
+    * **Evaluación Específica por Escenario:**
+        * **En el Escenario Ideal:** El método **Gauss-Seidel** es altamente eficiente, requiriendo un número mínimo de iteraciones debido a la actualización inmediata de las variables en memoria compartida, superando el retraso por pasos intermedios de Jacobi.
+        * **En el Escenario de Estrés:** El método **SOR** (Sobrerelajación Sucesiva) programado resulta ser la mejor elección operativa. Al tunear el slider dinámico a un parámetro de aceleración óptimo (ej. $\omega \approx 1.1 - 1.2$), barre con el residuo lineal y reduce el número de bucles computacionales de manera notable frente a Gauss-Seidel común.
+        * **En el Escenario Mal Condicionado:** Los métodos iterativos clásicos (**Jacobi y Gauss-Seidel**) sufren un colapso algorítmico total, superando las 100 iteraciones sin aproximarse a la tolerancia exigida debido a que el radio espectral de su matriz de iteración supera la unidad ($\rho(T) \geq 1$). En este caso límite, solo la **Factorización Directa LU** y el **Gradiente Conjugado Precondicionado** resuelven el sistema de homeostasis biológica con un error residual inferior a $10^{-6}$.
+    """)
 
     st.markdown("""
     ---
